@@ -95,4 +95,37 @@ const questions = {
 };
 
 
+function addEngineer() {
+    inquirer.prompt(questions.engineer).then((data) => {
+        const member = new Engineer(data.engineerName, data.engineerId, data.engineerEmail, data.engineerGithub);
+        team.push(member);
+        if (data.addMember === "Engineer") {
+            return addEngineer();
+        } else if (data.addMember === "Intern") {
+            return addIntern();
+        } else { 
+            return addMember();
+        }
+    });
 }
+
+function addIntern() {
+    inquirer.prompt(questions.intern).then((data) => {
+        const member = new Intern(data.internName, data.internId, data.internEmail, data.internSchool);
+        team.push(member);
+        if (data.addMember === "Engineer") {
+            return addEngineer();
+        } else if (data.addMember === "Intern") {
+            return addIntern();
+        } else { 
+        return addMember();
+        }
+    });
+}
+
+function addMember() {
+    fs.writeFileSync('./dist/index.html', generateHTML(team), 'utf-8'), (err) => 
+        err ? console.log(err) : console.log('Success!');
+}
+
+init();
